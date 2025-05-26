@@ -42,10 +42,9 @@ class Store:
     def order(self, shopping_list):
         """
         Buys the products and returns the total price of the order.
-        Assumption: product exists in store
+        Assumption: product exists in the store
         """
         float_total_price = 0
-
         for Product, quantity in shopping_list:
             for product in self.products:
                 if Product.name == product.name:

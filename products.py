@@ -65,5 +65,5 @@ class Product:
         if type(quantity) is not int:
             raise Exception("Error: Quantity needs to be of type int.")
         else:
-            self.quantity += quantity
+            self.quantity -= quantity
             return quantity * self.price
