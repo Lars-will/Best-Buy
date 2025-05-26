@@ -1,6 +1,6 @@
 from products import Product
 from store import Store
-#Specification isnt clear whether buy should increase of decreaase stock.
+
 
 product_list = [Product("MacBook Air M2", price=1450, quantity=100),
                 Product("Bose QuietComfort Earbuds", price=250, quantity=500),
@@ -9,11 +9,95 @@ product_list = [Product("MacBook Air M2", price=1450, quantity=100),
 
 best_buy = Store(product_list)
 
-products = best_buy.get_all_products()
+
+def start(store):
+    """Displays menu, checks, and returns user input.
+     if input is invalid, it returns 0
+     """
+
+    str_menu ="""1. List all products in store
+2. Show total amount in store
+3. Make an order
+4. Quit"""
+    print("Welcome to the Best Buy store! Please make you selection: ")
+    print(str_menu)
+    int_selection = 0
+    try:
+        int_input = int(input(">> "))
+        if 0 < int_input <= 4:
+            int_selection = int_input
+    except:
+        pass
+    return int_selection
 
 
-print(best_buy.get_total_quantity())
+def print_products():
+    """Prints the products in the store"""
+    lst_products = best_buy.get_all_products()
+    for product in lst_products:
+        print(product.show())
 
-print(best_buy.order([(products[0], 1), (products[1], 2)]))
 
-print(best_buy.get_total_quantity())
+def place_order():
+    """
+    Collects shopping list from user, validates input
+    and calls the Store.order method
+    """
+    list_shopping_list = []
+    float_price = 0
+    print("If you are finished with our order, press Enter.")
+    while True:
+        str_prod_id = input("Which product do you want to order? ")
+        if str_prod_id != "":
+            try:
+                int_prod_id = int(str_prod_id)
+                if 0 < int_prod_id <= Product.count:
+                    str_quantity = input("How many would you like to order? ")
+                    try:
+                        int_quantity = int(str_quantity)
+                        if int_quantity > 0:
+                            for product in best_buy.products:
+                                if product.id == int_prod_id:
+                                    list_shopping_list.append((product, int_quantity))
+                        else:
+                            raise Exception("Invalid Quantity")
+                    except:
+                        print("Enter a valid quantity.")
+                else:
+                    raise Exception("Invalid product.")
+            except:
+                print("Error. Please enter valid product number.")
+        else:
+            break
+    if len(list_shopping_list) > 0:
+        float_price = best_buy.order(list_shopping_list)
+    return float_price
+
+
+def main():
+    """Main program loop"""
+    while True:
+        int_selection = start(best_buy)
+        print()
+        if int_selection == 0:
+            print("Error. Invalid input. Please enter a valid menu option.")
+        elif int_selection == 1:
+            print_products()
+            print()
+        elif int_selection == 2:
+            print(f"Total of {best_buy.get_total_quantity()} products in store")
+            print()
+        elif int_selection == 3:
+            print_products()
+            print()
+            float_total_price = place_order()
+            print(f"Your order has been placed. Total Price: {float_total_price}")
+            print()
+        elif int_selection == 4:
+            break
+
+
+if __name__ == "__main__":
+    main()
+
+

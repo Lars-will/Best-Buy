@@ -1,5 +1,6 @@
 class Product:
     """This class represents a product and contains relevant properties and methods"""
+    count = 0
 
     def __init__(self, name, price, quantity):
         """Initialize Object"""
@@ -17,7 +18,8 @@ class Product:
             self.quantity = quantity
         else:
             raise Exception("Error: Invalid Quantity.")
-
+        Product.count += 1
+        self.id = Product.count
         self.active = True
 
 
@@ -50,20 +52,18 @@ class Product:
 
     def show(self) -> str:
         """Returns a string with name, price and quantity"""
-        return f"{self.name}, Price: {self.price}, Quantity: {self.quantity}"
+        return f"{self.id}: {self.name}, Price: {self.price}, Quantity: {self.quantity}"
 
 
     def buy(self, quantity) -> float:
         """Buys certain quantity of the product.
         -> Returns total price(float)
         -> Updates quantity
-        -> Raises an Exception when quantity is not of type int and
-        if quantity ordered > available quantity"""
+        -> Raises an Exception when quantity is not of type int
+        """
 
         if type(quantity) is not int:
             raise Exception("Error: Quantity needs to be of type int.")
-        elif quantity > self.quantity:
-            raise Exception("Error: Out of stock. Order can't be placed")
         else:
-            self.quantity -= quantity
+            self.quantity += quantity
             return quantity * self.price
